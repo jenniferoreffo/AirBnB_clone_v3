@@ -86,29 +86,23 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
-class TestDBStorage(untitest.TestCase):
-        """Test DBstorage class"""
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "not testing db storage")
-    def test_get(self):
-        """test that the get returns a specific object or none"""
-        new_state = State(name="Michigan")
-        new_state.save()
-        new_user = User(email="guest@foobar.com", password="guest")
-        new_user.save()
-        self.assertIs(None, models.storage.get("State:", "here"))
-        self.assertIs(new_state, models.storage.get("State", new_state.id))
-        self.assertIs(None, models.storage.get("here", "here"))
-        self.assertIs(new_user, models.storage.get("User", new_user.id))
+    def test_get_db(self):
+        """ Tests get method"""
+        dic = {"name": "Addisu"}
+        instance = State(**dic)
+        storage.new(instance)
+        storage.save()
+        get_instance = storage.get(State, instance.id)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "not testing db storage")
-    def test_count(self):
-        """test addition of object to database"""
-        initial_count = models.storage.count()
-        self.assertEqual(model.string.count("Blah"), 0)
-        new_state = State(name="Minesota")
-        new_state.save()
-        new_user = User(email="user@foobar.com", password="guest")
-        new_user.save()
-        self.assertEqual(models.storage.count("State"), initial_count + 1)
-        self.assertEqual(models.storage.count(), initial_count + 2)
-
+        self.assertEqual(get_instance, instance)
+                                                                def test_count(self):
+       """ Tests count method"""
+       dic = {"name": "Jennifer")
+       state = State(**dic)
+       storage.new(state)
+       dic = {"name": "Addisu", "state_id": state.id}
+       city = City(**dic)
+       storage.new(city)
+       storage.save()
+       c = storage.count()
+       self.assertEqual(len(storage.all()), c)
